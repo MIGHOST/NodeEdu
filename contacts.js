@@ -13,6 +13,7 @@ exports.listContacts = () => {
   });
 };
 
+
 exports.getContactById = async (id) => {
   const contactDb = await readFile(contactsPath, "utf8");
   const contacts = JSON.parse(contactDb);
