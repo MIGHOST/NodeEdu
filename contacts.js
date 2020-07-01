@@ -13,7 +13,6 @@ exports.listContacts = () => {
   });
 };
 
-
 exports.getContactById = async (id) => {
   const contactDb = await readFile(contactsPath, "utf8");
   const contacts = JSON.parse(contactDb);
@@ -26,19 +25,16 @@ exports.removeContact = async (id) => {
   const contacts = JSON.parse(contactDb);
   const remove = contacts.filter((contact) => contact.id !== id);
   await writeFile(contactsPath, JSON.stringify(remove));
-
 };
 
-exports.addContact = async (name, email, phone) => {
+exports.addContact = async (contact) => {
   const contactDb = await readFile(contactsPath, "utf8");
-  const contacts = JSON.parse(contactDb);
-  const id = contacts[contacts.length - 1].id + 1;
-  const newContact = {
-    id: id,
-    name: name,
-    email: email,
-    phone: phone,
-  };
-  contacts.push(newContact);
+  const contacts = [...JSON.parse(contactDb), contact];
   return await writeFile(contactsPath, JSON.stringify(contacts));
 };
+
+exports.updateContact = (contacts, contactId, body) => {
+  return JSON.parse(contacts).map((contact) =>
+    contact.id === contactId ? { ...contact, ...body } : contact
+  );
+}

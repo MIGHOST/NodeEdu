@@ -1,9 +1,4 @@
 [{
-    "id": 1,
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-}, {
     "id": 2,
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
@@ -48,4 +43,8 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+}, {
+    "id": "bf58d5b2-9018-4d72-b4fe-64e34ff94460",
+    "name": "Kennedy Lane",
+    "email": "sdfs@i.ua"
 }]

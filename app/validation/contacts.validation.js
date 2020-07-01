@@ -1,9 +1,9 @@
-const Joi = require("@hapi/joi");
+const Joi = require("@hapi/joi")
 
 exports.creatContactValidation = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.number(),
+  phone: Joi.number().required(),
 });
 
 exports.updateContactValidation = Joi.object({
