@@ -8,7 +8,7 @@ const PORT = process.env.PORT;
 const { contactRouter } = require('./app/router/contacts.router');
 
 app.use(express.json());
-app.use(cors({ origin: 'http:/localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(morgan('combined'));
 
 app.use('/contacts', contactRouter);
