@@ -4,7 +4,7 @@ const ContactController = require('./contact.cotroller');
 
 // contactRouter.get('/', ContactController.createContact);
 // contactRouter.get('/:contactId', getContactById);
-// contactRouter.post('/', ContactController.createContact);
+contactRouter.post('/', ContactController.createContact);
 // contactRouter.delete('/:contactId', removeContactById);
 // contactRouter.patch('/:contactId', updateContact);
 
