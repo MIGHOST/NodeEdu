@@ -6,7 +6,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const PORT = process.env.PORT;
 const contactRouter = require('./app/contact/contacts.router');
-const authRouter = require('./app/auth/auth.router');
+const userRouter = require('./app/user/user.router');
+
 const runServer = async () => {
   const app = express();
   app.use(express.json());
@@ -20,12 +21,10 @@ const runServer = async () => {
     app.use(cors({ origin: 'http://localhost:3000' }));
     app.use(morgan('combined'));
 
+    app.use('/auth', userRouter);
     app.use('/contacts', contactRouter);
-    app.use('/auth', authRouter);
   } catch (error) {
-    if (error) {
-      process.exit(1);
-    }
+    process.exit(1);
   }
 
   app.listen(PORT, err =>
