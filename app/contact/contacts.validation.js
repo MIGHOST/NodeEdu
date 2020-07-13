@@ -4,9 +4,8 @@ const creatContactValidation = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  subscription: Joi.string(),
   password: Joi.string().required(),
-  token: Joi.string(),
+ 
 });
 
 exports.contactValidateMiddleware = (req, res, next) => {
