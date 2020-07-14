@@ -36,11 +36,27 @@ class UserController {
       if (!isValidPassword) {
         return res.status(401).send({ message: 'Email or password is wrong' });
       }
-
-      const token = await creatToken(user._id);
-      res.status(200).json({user, token});
+      const newToken = await creatToken(user._id);
+      const userWithToken = await userModel.findByIdAndUpdate(user._id, {
+        token: newToken,
+      });
+      res.status(200).json({
+        email: userWithToken.email,
+        subscription: userWithToken.subscription,
+        token: newToken,
+      });
     } catch (error) {
       res.status(500).send('Server error');
+    }
+  }
+
+  async logoutUser(req, res) {
+    try {
+      const user = req.user;
+      await userModel.findByIdAndUpdate(user._id, { token: null });
+      return res.status(204).send();
+    } catch (error) {
+      res.status(500).send('Server error logout');
     }
   }
 
