@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT;
 const contactRouter = require('./app/contact/contacts.router');
 const authRouter = require('./app/auth/auth.router');
+
 const runServer = async () => {
   const app = express();
   app.use(express.json());
@@ -19,6 +20,7 @@ const runServer = async () => {
 
     app.use(cors({ origin: 'http://localhost:3000' }));
     app.use(morgan('combined'));
+
 
     app.use('/contacts', contactRouter);
     app.use('/auth', authRouter);
