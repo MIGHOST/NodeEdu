@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const { Schema } = require('mongoose');
 
 const contactSchema = new Schema({
@@ -22,6 +23,6 @@ async function findContactByIdAndUpdate(contactId, updateParams) {
   );
 }
 contactSchema.statics.findContactByIdAndUpdate = findContactByIdAndUpdate;
-
+contactSchema.plugin(mongoosePaginate)
 const contactModel = mongoose.model('Contact', contactSchema);
 module.exports = contactModel;

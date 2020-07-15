@@ -12,8 +12,3 @@ exports.RegValidateMiddleware = (req, res, next) => {
   }
   next();
 };
-
-exports.LoginValidation = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});

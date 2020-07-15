@@ -4,8 +4,5 @@ dotenv.config();
 const secret = process.env.SECRET;
 
 exports.creatToken = async id => {
-  return jwt.sign(
-    { id },
-    secret, {expiresIn: "24h"}
-  );
+  return jwt.sign({ id }, secret, { expiresIn: '24h' });
 };

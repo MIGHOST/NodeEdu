@@ -3,6 +3,7 @@ const userModel = require('./user.model');
 const { sault } = require('../../config');
 const { LoginValidation } = require('../auth/auth.validator');
 const { creatToken } = require('../../services/auth.services');
+const { prepareUserResponse } = require('../../helpers/helpers');
 
 class UserController {
   async registerUser(req, res) {
@@ -52,29 +53,46 @@ class UserController {
 
   async logoutUser(req, res) {
     try {
-      const user = req.user;
+      const { user } = req;
       await userModel.findByIdAndUpdate(user._id, { token: null });
       return res.status(204).send();
     } catch (error) {
-      res.status(500).send('Server error logout');
+      res.status(500).send('Server error');
+    }
+  }
+  getCurrentUser(req, res) {
+    const { user } = prepareUserResponse(req.user);
+    return res.status(200).send(user);
+  }
+
+  async getUsers(req, res) {
+    try {
+      const users = await userModel.find(req.quey, {
+        password: false,
+        _id: false,
+      });
+      if (!users) {
+        return res.status(400).send({ message: 'User not founded' });
+      }
+      return res.status(201).send(users);
+    } catch (error) {
+      res.status(500).send('Server error');
     }
   }
 
-  // async getUsers(req, res) {
-  //   try {
-
-  //     const users = await userModel.find(req.quey, {
-  //       password: false,
-  //       _id: false,
-  //     });
-  //     if (!users) {
-  //       return res.status(400).send({ message: 'User not founded' });
-  //     }
-  //     return res.status(201).send(users);
-  //   } catch (error) {
-  //     res.status(500).send('Server error');
-  //   }
-  // }
+  async changeUserStatus(req, res) {
+    try {
+      const { user } = req;
+      await userModel.findByIdAndUpdate(
+        user._id,
+        { $set: req.body },
+        { new: true },
+      );
+      return res.status(204).send();
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  }
 }
 
 module.exports = new UserController();
