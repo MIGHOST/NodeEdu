@@ -17,7 +17,27 @@ class ContactController {
   }
   async getContacts(req, res) {
     try {
-      const contacts = await contactModel.find();
+      const { page, limit, sub } = req.query;
+      if (page && limit) {
+        const options = {
+          page,
+          limit
+        };
+
+        const contacts = await contactModel.paginate({}, options);
+
+        return res.status(200).json(contacts.docs);
+      }
+
+      if (sub) {
+        const options = {
+          subscription: sub,
+        };
+        const contacts = await contactModel.find(options);
+
+        return res.status(200).json(contacts);
+      }
+      const contacts = await contactModel.find({});
       if (!contacts) {
         return res.status(400).send({ message: 'Contacts not founded' });
       }
