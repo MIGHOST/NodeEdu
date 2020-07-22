@@ -4,6 +4,7 @@ const { sault } = require('../../config');
 const { LoginValidation } = require('../auth/auth.validator');
 const { creatToken } = require('../../services/auth.services');
 const { prepareUserResponse } = require('../../helpers/helpers');
+const { generateAvatar } = require('../../services/genAv');
 
 class UserController {
   async registerUser(req, res) {
@@ -14,7 +15,10 @@ class UserController {
         return res.status(409).send({ message: 'Email in use' });
       }
       const hashPassword = await bcrypt.hash(password, sault);
-      const userData = { ...req.body, password: hashPassword };
+      const avatar = generateAvatar(email);
+      console.log("test");
+      console.log(avatar);
+      const userData = { ...req.body, password: hashPassword, avatar };
       const user = await userModel.create(userData);
       if (!user) {
         return res.status(400).send({ message: 'User not creat' });
