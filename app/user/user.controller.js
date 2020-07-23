@@ -1,3 +1,7 @@
+const path = require("path");
+const fsPromises = require("fs").promises;
+require('dotenv').config();
+const PORT = process.env.PORT;
 const bcrypt = require('bcrypt');
 const userModel = require('./user.model');
 const { sault } = require('../../config');
@@ -15,17 +19,25 @@ class UserController {
         return res.status(409).send({ message: 'Email in use' });
       }
       const hashPassword = await bcrypt.hash(password, sault);
-      const avatar = generateAvatar(email);
-      console.log("test");
-      console.log(avatar);
-      const userData = { ...req.body, password: hashPassword, avatar };
+      const avatar = generateAvatar(email);       
+    
+      console.log("test2");
+      console.log(avatarName);
+      const avatarPath = path.join(
+        __dirname,
+        `../../tmp/${avatarName}`
+      );
+      await fsPromises.writeFile(avatarPath, avatar);
+      const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
+     
+      const userData = { ...req.body, password: hashPassword, avatarURL };
       const user = await userModel.create(userData);
       if (!user) {
         return res.status(400).send({ message: 'User not creat' });
       }
       return res
         .status(201)
-        .send({ email: user.email, subscription: user.subscription });
+        .send({ email: user.email, subscription: user.subscription, avatarURL });
     } catch (error) {
       res.status(500).send('Server error');
     }
