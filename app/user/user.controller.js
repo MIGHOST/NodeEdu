@@ -8,7 +8,7 @@ const { sault } = require('../../config');
 const { LoginValidation } = require('../auth/auth.validator');
 const { creatToken } = require('../../services/auth.services');
 const { prepareUserResponse } = require('../../helpers/helpers');
-const { generateAvatar } = require('../../services/genAv');
+const { generateAvatar, minifyImage } = require('../../services/genAv');
 
 class UserController {
   async registerUser(req, res) {
@@ -20,15 +20,18 @@ class UserController {
       }
       const hashPassword = await bcrypt.hash(password, sault);
       const avatar = generateAvatar(email);       
-    
-      console.log("test2");
-      console.log(avatarName);
-      const avatarPath = path.join(
-        __dirname,
-        `../../tmp/${avatarName}`
-      );
-      await fsPromises.writeFile(avatarPath, avatar);
-      const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
+   const avatarName = `${email}.png`
+   const test = minifyImage(avatarName);
+   console.log("test");
+   console.log(avatar);
+      // console.log("test2");
+      // console.log(avatarName);
+      // const avatarPath = path.join(
+      //   __dirname,
+      //   `../../tmp/${avatarName}`
+      // );
+      // await fsPromises.writeFile(avatarPath, avatar);
+      // const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
      
       const userData = { ...req.body, password: hashPassword, avatarURL };
       const user = await userModel.create(userData);

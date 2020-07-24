@@ -8,7 +8,7 @@ const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
 
 const storage = multer.diskStorage({
-  destination: 'public/tmp',
+  destination: './tmp',
   filename: function (req, file, cb) {
     const ext = path.parse(file.originalname).ext;
     cb(null, Date.now() + ext);
