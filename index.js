@@ -8,7 +8,7 @@ const PORT = process.env.PORT;
 const contactRouter = require('./app/contact/contacts.router');
 const authRouter = require('./app/auth/auth.router');
 const userRouter = require('./app/user/user.router');
-const imgRouter = require('./middleware/images.middleware');
+// const imgRouter = require('./middleware/images.middleware');
 
 const runServer = async () => {
   const app = express();
@@ -22,12 +22,12 @@ const runServer = async () => {
 
     app.use(cors({ origin: 'http://localhost:3000' }));
     app.use(morgan('combined'));
-    app.use(express.static("public"))
+    app.use("/images", express.static("public/images"))
 
     app.use('/users', userRouter);
     app.use('/contacts', contactRouter);
     app.use('/auth', authRouter);
-    app.use('/images', imgRouter);
+    // app.use('/images', imgRouter);
 
 
   } catch (error) {

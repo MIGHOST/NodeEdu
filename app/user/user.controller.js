@@ -1,14 +1,15 @@
-const path = require("path");
-const fsPromises = require("fs").promises;
+const path = require('path');
 require('dotenv').config();
 const PORT = process.env.PORT;
 const bcrypt = require('bcrypt');
 const userModel = require('./user.model');
 const { sault } = require('../../config');
-const { LoginValidation } = require('../auth/auth.validator');
 const { creatToken } = require('../../services/auth.services');
 const { prepareUserResponse } = require('../../helpers/helpers');
-const { generateAvatar, minifyImage } = require('../../services/genAv');
+const {
+  generateAvatar,
+  minifyImage,
+} = require('../../services/generateAvatar');
 
 class UserController {
   async registerUser(req, res) {
@@ -19,28 +20,20 @@ class UserController {
         return res.status(409).send({ message: 'Email in use' });
       }
       const hashPassword = await bcrypt.hash(password, sault);
-      const avatar = generateAvatar(email);       
-   const avatarName = `${email}.png`
-   const test = minifyImage(avatarName);
-   console.log("test");
-   console.log(avatar);
-      // console.log("test2");
-      // console.log(avatarName);
-      // const avatarPath = path.join(
-      //   __dirname,
-      //   `../../tmp/${avatarName}`
-      // );
-      // await fsPromises.writeFile(avatarPath, avatar);
-      // const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
-     
+      const avatar = await generateAvatar(email);
+      const avatarName = `${email}.png`;
+      minifyImage(avatarName);
+      const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
       const userData = { ...req.body, password: hashPassword, avatarURL };
       const user = await userModel.create(userData);
       if (!user) {
         return res.status(400).send({ message: 'User not creat' });
       }
-      return res
-        .status(201)
-        .send({ email: user.email, subscription: user.subscription, avatarURL });
+      return res.status(201).send({
+        email: user.email,
+        subscription: user.subscription,
+        avatarURL,
+      });
     } catch (error) {
       res.status(500).send('Server error');
     }
@@ -108,6 +101,24 @@ class UserController {
         { new: true },
       );
       return res.status(204).send();
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  }
+
+  async changeUserAvatar(req, res) {
+    try {
+      const { user } = req;
+      const { filename } = req.file;
+      const newAvatarURL = `http://localhost:${PORT}/images/${filename}`;
+      await userModel.findByIdAndUpdate(
+        user._id,
+        { $set: (user.avatarURL = newAvatarURL) },
+        { new: true },
+      );
+      return res.status(200).json({
+        avatarURL: req.user.avatarURL,
+      });
     } catch (error) {
       res.status(500).send('Server error');
     }
