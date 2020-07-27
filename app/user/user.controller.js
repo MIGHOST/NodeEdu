@@ -110,14 +110,10 @@ class UserController {
     try {
       const { user } = req;
       const { filename } = req.file;
-      const newAvatarURL = `http://localhost:${PORT}/images/${filename}`;
-      await userModel.findByIdAndUpdate(
-        user._id,
-        { $set: (user.avatarURL = newAvatarURL) },
-        { new: true },
-      );
+      const avatarURL = `http://localhost:${PORT}/images/${filename}`;
+      await userModel.updateUser(user._id, { avatarURL });
       return res.status(200).json({
-        avatarURL: req.user.avatarURL,
+        avatarURL,
       });
     } catch (error) {
       res.status(500).send('Server error');

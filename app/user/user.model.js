@@ -12,6 +12,16 @@ const userSchema = new Schema({
   },
   token: { type: String, required: false },
 });
+userSchema.static('updateUser', async function (id, updateParams) {
+  const user = await this.findById(id);
 
+  if (!user) throw new Error('User not found');
+
+  Object.keys(updateParams).forEach(name => {
+    user[name] = updateParams[name];
+  });
+
+  return user.save();
+});
 const userModel = mongoose.model('User', userSchema);
 module.exports = userModel;
