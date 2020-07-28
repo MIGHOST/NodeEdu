@@ -1,4 +1,3 @@
-const path = require('path');
 require('dotenv').config();
 const PORT = process.env.PORT;
 const bcrypt = require('bcrypt');
@@ -20,7 +19,7 @@ class UserController {
         return res.status(409).send({ message: 'Email in use' });
       }
       const hashPassword = await bcrypt.hash(password, sault);
-      const avatar = await generateAvatar(email);
+      await generateAvatar(email);
       const avatarName = `${email}.png`;
       minifyImage(avatarName);
       const avatarURL = `http://localhost:${PORT}/images/${avatarName}`;
@@ -108,8 +107,8 @@ class UserController {
 
   async changeUserAvatar(req, res) {
     try {
-      const { user } = req;
-      const { filename } = req.file;
+      const { user, file } = req;
+      const { filename } = file;
       const avatarURL = `http://localhost:${PORT}/images/${filename}`;
       await userModel.updateUser(user._id, { avatarURL });
       return res.status(200).json({
