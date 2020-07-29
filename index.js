@@ -21,10 +21,12 @@ const runServer = async () => {
 
     app.use(cors({ origin: 'http://localhost:3000' }));
     app.use(morgan('combined'));
+    app.use("/images", express.static("public/images"))
 
     app.use('/users', userRouter);
     app.use('/contacts', contactRouter);
     app.use('/auth', authRouter);
+
   } catch (error) {
     if (error) {
       process.exit(1);

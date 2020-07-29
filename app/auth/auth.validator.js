@@ -8,7 +8,7 @@ exports.RegValidateMiddleware = (req, res, next) => {
   const { error } = regValidation.validate(req.body);
   if (error) {
     res.status(403).send('Bad request');
-    return;
+    return error;
   }
   next();
 };
