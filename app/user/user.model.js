@@ -11,6 +11,12 @@ const userSchema = new Schema({
     default: 'free',
   },
   token: { type: String, required: false },
+  verificationToken: {
+    type: String,
+    required: true,
+    enum: ['Verified', 'Created'],
+    default: 'Created',
+  },
 });
 userSchema.static('updateUser', async function (id, updateParams) {
   const user = await this.findById(id);
