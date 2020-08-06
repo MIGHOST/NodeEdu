@@ -12,5 +12,6 @@ authRouter.post(
 );
 authRouter.post('/login', RegValidateMiddleware, UserController.loginUser);
 authRouter.post('/logout', tokenMiddleware, UserController.logoutUser);
+authRouter.get('/verify/:verificationToken', UserController.verifyEmail);
 
 module.exports = authRouter;

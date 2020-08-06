@@ -14,9 +14,7 @@ userRouter.patch(
   tokenMiddleware,
   upload.single('img_file'),
   minifyAvatar,
-//   (req, res, next) => {
-//     res.status(200).send(req.file);
-//   },
   UserController.changeUserAvatar,
 );
+
 module.exports = userRouter;

@@ -29,5 +29,26 @@ userSchema.static('updateUser', async function (id, updateParams) {
 
   return user.save();
 });
+userSchema.static('findByVerifycationToken', async function (
+  verificationToken,
+) {
+  return this.findOne({
+    verificationToken,
+  });
+});
+
+userSchema.static('verifyUser', async function (id) {
+  return this.findByIdAndUpdate(
+    id,
+    {
+      status: 'Verified',
+      verificationToken: null,
+    },
+    {
+      new: true,
+    },
+  );
+});
+
 const userModel = mongoose.model('User', userSchema);
 module.exports = userModel;

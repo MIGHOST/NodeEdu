@@ -1,6 +1,7 @@
 require('dotenv').config();
-const PORT = process.env.PORT; 
+const PORT = process.env.PORT;
 const bcrypt = require('bcrypt');
+const uuid = require('uuid');
 const userModel = require('./user.model');
 const { sault } = require('../../config');
 const { creatToken } = require('../../services/auth.services');
@@ -28,6 +29,9 @@ class UserController {
       if (!user) {
         return res.status(400).send({ message: 'User not creat' });
       }
+
+      await this.sendVerificationMail(user);
+
       return res.status(201).send({
         email: user.email,
         subscription: user.subscription,
@@ -37,6 +41,21 @@ class UserController {
       res.status(500).send('Server error');
     }
   }
+
+  async sendVerificationMail(user) {
+    try {
+      const verificationToken = uuid.v4();
+      await userModel.updateUser(user._id, verificationToken);
+  //=========Логіка відправки
+
+  await this.transport.senMail({
+    
+  })
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  }
+
   async loginUser(req, res) {
     try {
       const { email, password } = req.body;
@@ -114,6 +133,21 @@ class UserController {
       return res.status(200).json({
         avatarURL,
       });
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  }
+
+  async verifyEmail(req, res) {
+    try {
+      const { token } = req.params;
+      const userToVerify = await userModel.findByVerifycationToken(token);
+      if (!userToVerify) {
+        throw new Error('User not found');
+      }
+
+      await userModel.verifyUser(userToVerify._id);
+      return res.status(200);
     } catch (error) {
       res.status(500).send('Server error');
     }
