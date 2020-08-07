@@ -10,6 +10,8 @@ const {
   generateAvatar,
   minifyImage,
 } = require('../../services/generateAvatar');
+const { SendVerificationMail } = require('../../services/email.sender');
+SendVerificationMail
 
 class UserController {
   async registerUser(req, res) {
