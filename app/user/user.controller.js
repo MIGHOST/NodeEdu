@@ -11,7 +11,7 @@ const {
   minifyImage,
 } = require('../../services/generateAvatar');
 const { SendVerificationMail } = require('../../services/email.sender');
-SendVerificationMail
+
 
 class UserController {
   async registerUser(req, res) {
@@ -32,7 +32,7 @@ class UserController {
         return res.status(400).send({ message: 'User not creat' });
       }
 
-      await this.sendVerificationMail(user);
+      await SendVerificationMail(user._id, user.email);
 
       return res.status(201).send({
         email: user.email,
@@ -44,19 +44,19 @@ class UserController {
     }
   }
 
-  async sendVerificationMail(user) {
-    try {
-      const verificationToken = uuid.v4();
-      await userModel.updateUser(user._id, verificationToken);
-  //=========Логіка відправки
+  // async sendVerificationMail(user) {
+  //   try {
+  //     const verificationToken = uuid.v4();
+  //     await userModel.updateUser(user._id, verificationToken);
+  // //=========Логіка відправки
 
-  await this.transport.senMail({
+  // await this.transport.senMail({
     
-  })
-    } catch (error) {
-      res.status(500).send('Server error');
-    }
-  }
+  // })
+  //   } catch (error) {
+  //     res.status(500).send('Server error');
+  //   }
+  // }
 
   async loginUser(req, res) {
     try {
