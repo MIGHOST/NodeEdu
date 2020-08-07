@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
+const { boolean } = require('yargs');
 
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
@@ -11,16 +12,16 @@ const userSchema = new Schema({
     default: 'free',
   },
   token: { type: String, required: false },
-  verificationToken: {
+  status: {
     type: String,
     required: true,
     enum: ['Verified', 'Created'],
     default: 'Created',
   },
+  verificationToken: { type: String, required: false },
 });
 userSchema.static('updateUser', async function (id, updateParams) {
   const user = await this.findById(id);
-
   if (!user) throw new Error('User not found');
 
   Object.keys(updateParams).forEach(name => {
@@ -29,7 +30,9 @@ userSchema.static('updateUser', async function (id, updateParams) {
 
   return user.save();
 });
-userSchema.static('findByVerifycationToken', async function (
+
+
+userSchema.static('findByVerificationToken', async function (
   verificationToken,
 ) {
   return this.findOne({
