@@ -1,5 +1,5 @@
 require('dotenv').config();
-const PORT = process.env.PORT;
+const {PORT} = process.env;
 const bcrypt = require('bcrypt');
 const userModel = require('../user/user.model');
 const { sault } = require('../../config');

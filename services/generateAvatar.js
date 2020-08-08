@@ -1,7 +1,6 @@
 const Avatar = require('avatar-builder');
 const fs = require('fs').promises;
 const path = require('path');
-const util = require('util');
 const imagemin = require('imagemin');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');

@@ -4,7 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT;
+const {PORT, DB_URI} = process.env;
 const contactRouter = require('./app/contact/contacts.router');
 const authRouter = require('./app/auth/auth.router');
 const userRouter = require('./app/user/user.router');
@@ -13,7 +13,7 @@ const runServer = async () => {
   const app = express();
   app.use(express.json());
   try {
-    await mongoose.connect(process.env.DB_URI, {
+    await mongoose.connect(DB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
