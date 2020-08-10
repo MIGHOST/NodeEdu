@@ -1,10 +1,10 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env')});
 const sgMail = require('@sendgrid/mail');
-const {PORT} = process.env; 
-const KEY = process.env.SENDGRID_API_KEY;
+const {PORT, SENDGRID_API_KEY} = process.env; 
 
-sgMail.setApiKey(KEY);
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 exports.SendVerificationMail = async (verificationToken, email) => {
 
