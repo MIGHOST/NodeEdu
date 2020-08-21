@@ -16,6 +16,6 @@ exports.tokenMiddleware = async (req, res, next) => {
     req.token = token;
     next();
   } catch (error) {
-    next(error);
+    res.status(500).send('Server error');
   }
 };
